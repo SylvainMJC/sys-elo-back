@@ -4,6 +4,7 @@ const userRoleController = require('../controllers/userRoleController');
 const auth = require('../middlewares/auth');
 const isAdmin = require('../middlewares/isAdmin');
 
+
 router.post('/', auth, isAdmin, userRoleController.createUserRole);
 router.get('/', auth, isAdmin, userRoleController.getAllUserRoles);
 router.get('/:id', auth, isAdmin, userRoleController.getUserRoleById);
