@@ -1,20 +1,21 @@
 require('dotenv').config();
 const express = require('express');
 const { Sequelize } = require('sequelize');
+const routes = require('./routes');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Configuration Sequelize avec PostgreSQL
 const sequelize = new Sequelize(
-    process.env.DB_NAME,       
-    process.env.DB_USER,       
-    process.env.DB_PASSWORD,   
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD,
     {
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
         dialect: 'postgres',
-        logging: false, 
+        logging: false,
     }
 );
 
@@ -23,12 +24,18 @@ async function testDatabaseConnection() {
     try {
         await sequelize.authenticate();
         console.log('Connection to the PostgreSQL database has been established successfully.');
-        } catch (error) {
+    } catch (error) {
         console.error('Unable to connect to the PostgreSQL database:', error);
     }
 }
 
 testDatabaseConnection();
+
+// Middleware pour parser le corps des requêtes
+app.use(express.json());
+
+// Utiliser les routes
+app.use('/api', routes);
 
 // Route principale
 app.get('/', (req, res) => {
@@ -39,3 +46,5 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
+module.exports = { sequelize };
