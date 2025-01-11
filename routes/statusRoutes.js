@@ -4,10 +4,12 @@ const statusController = require('../controllers/statusController');
 const auth = require('../middlewares/auth');
 const isAdmin = require('../middlewares/isAdmin');
 
-router.post('/', auth, isAdmin, statusController.createStatus);
-router.get('/', auth, isAdmin, statusController.getAllStatuses);
-router.get('/:id', auth, isAdmin, statusController.getStatusById);
-router.put('/:id', auth, isAdmin, statusController.updateStatus);
-router.delete('/:id', auth, isAdmin, statusController.deleteStatus);
+module.exports = (statusController) => {
+    router.post('/', (req, res) => statusController.createStatus(req, res));
+    router.get('/', (req, res) => statusController.getAllStatuses(req, res));
+    router.get('/:id', (req, res) => statusController.getStatusById(req, res));
+    router.put('/:id', (req, res) => statusController.updateStatus(req, res));
+    router.delete('/:id', (req, res) => statusController.deleteStatus(req, res));
 
-module.exports = router;
+    return router;
+}

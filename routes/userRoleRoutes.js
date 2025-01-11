@@ -1,14 +1,17 @@
 const express = require('express');
-const router = express.Router();
-const userRoleController = require('../controllers/userRoleController');
 const auth = require('../middlewares/auth');
 const isAdmin = require('../middlewares/isAdmin');
 
+module.exports = (userRoleController) => {
 
-router.post('/', auth, isAdmin, userRoleController.createUserRole);
-router.get('/', auth, isAdmin, userRoleController.getAllUserRoles);
-router.get('/:id', auth, isAdmin, userRoleController.getUserRoleById);
-router.put('/:id', auth, isAdmin, userRoleController.updateUserRole);
-router.delete('/:id', auth, isAdmin, userRoleController.deleteUserRole);
+    const router = express.Router();
 
-module.exports = router;
+    router.post('/', (req, res) => userRoleController.createUserRole(req, res));
+    router.get('/', (req, res) => userRoleController.getAllUserRoles(req, res));
+    router.get('/:id', (req, res) => userRoleController.getUserRoleById(req, res));
+    router.put('/:id', (req, res) => userRoleController.updateUserRole(req, res));
+    router.delete('/:id', (req, res) => userRoleController.deleteUserRole(req, res));
+
+    return router;
+};
+

@@ -1,13 +1,19 @@
 const express = require('express');
-const router = express.Router();
-const matchController = require('../controllers/matchController');
+
+const MatchController = require('../controllers/matchController');
 const auth = require('../middlewares/auth');
 const isAdmin = require('../middlewares/isAdmin');
 
-router.post('/', auth, isAdmin, matchController.createMatch);
-router.get('/', auth, isAdmin, matchController.getAllMatches);
-router.get('/:id', auth, isAdmin, matchController.getMatchById);
-router.put('/:id', auth, isAdmin, matchController.updateMatch);
-router.delete('/:id', auth, isAdmin, matchController.deleteMatch);
 
-module.exports = router;
+module.exports = (matchController) => {
+    const router = express.Router();
+    
+    router.post('/',  matchController.createMatch.bind(matchController));
+    router.get('/',  matchController.getAllMatches.bind(matchController));;
+    router.get('/:id',  matchController.getMatchById.bind(matchController));
+    router.put('/:id',  matchController.updateMatch.bind(matchController));
+    router.delete('/:id',  matchController.deleteMatch.bind(matchController));
+
+    return router;
+};
+

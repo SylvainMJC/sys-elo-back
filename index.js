@@ -1,80 +1,55 @@
 // require('dotenv').config();
+// const sequelize = require('./config/db');
 // const express = require('express');
-// const { sequelize } = require('./models');
-// const routes = require('./routes');
+// const app = require('./app');
 
-// const app = express();
-// const port = process.env.PORT || 3000;
-
-// // Tester la connexion Sequelize
-// async function testDatabaseConnection() {
-//     try {
-//         await sequelize.authenticate();
-//         console.log('Connection to the PostgreSQL database has been established successfully.');
-//     } catch (error) {
-//         console.error('Unable to connect to the PostgreSQL database:', error);
-//     }
-// }
-
-// testDatabaseConnection();
-
-// // Middleware pour parser le corps des requêtes
 // app.use(express.json());
 
-// // Utiliser les routes
-// app.use('/api', routes);
+// // Tester la connexion à la base de données
+// sequelize.authenticate()
+//     .then(() => {
+//         console.log('Connected to the database successfully.');
+//     })
+//     .catch((error) => {
+//         console.error('Unable to connect to the database:', error);
+//     });
 
-// // Route principale
-// app.get('/', (req, res) => {
-//     res.send('Hello, Express with Sequelize and PostgreSQL!');
-// });
+// // Synchroniser les modèles
+// sequelize.sync()
+//     .then(() => console.log('Database synced'))
+//     .catch((err) => console.error('Failed to sync database:', err));
+
 
 // // Démarrer le serveur
-// app.listen(port, () => {
-//     console.log(`Server is running on http://localhost:${port}`);
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => {
+//     console.log(`Server running on http://localhost:${PORT}`);
 // });
 
-// // Synchroniser les modèles avec la base de données
-// sequelize.sync({ force: false }).then(() => {
-//     console.log('Database synchronized');
-// });
+
 require('dotenv').config();
+const sequelize = require('./config/db');
 const express = require('express');
-const { sequelize } = require('./models');
-const routes = require('./routes');
+const app = require('./app');
 
-const app = express();
-const port = process.env.PORT || 3000;
-
-// Tester la connexion Sequelize
-async function testDatabaseConnection() {
-    try {
-        await sequelize.authenticate();
-        console.log('Connection to the PostgreSQL database has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the PostgreSQL database:', error);
-    }
-}
-
-testDatabaseConnection();
-
-// Middleware pour parser le corps des requêtes
 app.use(express.json());
 
-// Utiliser les routes
-app.use('/api', routes);
+// Tester la connexion à la base de données
+sequelize.authenticate()
+    .then(() => {
+        console.log('Connected to the database successfully.');
+    })
+    .catch((error) => {
+        console.error('Unable to connect to the database:', error);
+    });
 
-// Route principale
-app.get('/', (req, res) => {
-    res.send('Hello, Express with Sequelize and PostgreSQL!');
-});
-
+// Synchroniser les modèles
+sequelize.sync()
+    .then(() => console.log('Database synced'))
+    .catch((err) => console.error('Failed to sync database:', err));
+    
 // Démarrer le serveur
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
-
-// Synchroniser les modèles avec la base de données
-sequelize.sync({ force: false }).then(() => {
-    console.log('Database synchronized');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
 });
