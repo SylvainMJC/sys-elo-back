@@ -1,15 +1,28 @@
+const User = require("../models/user");
 
 class MatchService {
 
     constructor(MatchModel) {
         this.Match = MatchModel;
-        console.log(this.Match, 'this.Match constructor' )
     }
 
+    async calculateElo(player1Id, player2Id, resultPlayer1, resultPlayer2) {
+        const K = 32;
+    
+        const player1 = await User.findByPk(player1Id);
+        const player2 = await User.findByPk(player2Id);
+    
+        if (!player1 || !player2) {
+            throw new Error('Un ou plusieurs joueurs sont introuvables.');
+        }
+
+        
+    
+    }    
 
     async createMatch(data) {
         try {
-            console.log('Creating match with data:', data);
+            
             return await this.Match.create(data);
         } catch (error) {
             throw new Error(`Error creating match: ${error.message}`);

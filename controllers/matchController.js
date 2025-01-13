@@ -11,6 +11,8 @@ class MatchController {
 
     async createMatch(req, res) {
         try {
+
+            
             const match = await this.matchService.createMatch(req.body);
             console.log(match, 'match')
             res.status(201).json(match);
