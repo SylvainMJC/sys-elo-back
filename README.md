@@ -1,12 +1,11 @@
 Backend
 
-register 
+register
 http://localhost:3000/api/register
 body:
 "username": "xxx"
 "email": "mail",
 "password": "pass"
-
 
 login
 http://localhost:3000/api/login
@@ -17,3 +16,7 @@ body:
 logout
 "message": "Vous êtes déconnecté"
 
+---
+
+How to run app :
+npm run dev
