@@ -3,7 +3,7 @@ const cors = require("cors");
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:4200",
+    origin: "*",
   })
 );
 const bodyParser = require("body-parser");
