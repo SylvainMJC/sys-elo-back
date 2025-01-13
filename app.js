@@ -45,7 +45,7 @@ const statusController = new StatusController(statusService);
 const statusRoutes = StatusRoutes(statusController);
 
 const matchService = new MatchService(Match);
-const matchController = new MatchController(matchService);
+const matchController = new MatchController(matchService, userService);
 const matchRoutes = MatchRoutes(matchController);
 
 const userRoleService = new UserRoleService(UserRole);

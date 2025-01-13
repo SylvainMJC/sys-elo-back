@@ -1,16 +1,17 @@
 const MatchService = require("../services/matchService");
+const UserService = require("../services/userService");
 const { Match } = require("../models/match");
+const { User } = require("../models/user");
 
 class MatchController {
-  constructor(matchService) {
+  constructor(matchService, userService) {
     this.matchService = matchService;
-    console.error(this.matchService, "this.matchService");
+    this.userService = userService;
   }
 
   async createMatch(req, res) {
     try {
       const match = await this.matchService.createMatch(req.body);
-      console.log(match, "match");
       res.status(201).json(match);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -20,6 +21,20 @@ class MatchController {
   async getAllMatches(req, res) {
     try {
       const matches = await this.matchService.getMatches();
+      for (const match of matches) {
+        const id1 = match.player1;
+        const id2 = match.player2;
+
+        // Fetch users in parallel
+        const [user1, user2] = await Promise.all([
+          this.userService.getUserById(id1),
+          this.userService.getUserById(id2),
+        ]);
+
+        // Replace ids with user objects if found
+        if (user1) match.player1 = user1;
+        if (user2) match.player2 = user2;
+      }
       res.status(200).json(matches);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -30,6 +45,17 @@ class MatchController {
     try {
       const match = await this.matchService.getMatchById(req.params.id);
       if (match) {
+        const id1 = match.player1;
+        const id2 = match.player2;
+        const [user1, user2] = await Promise.all([
+          this.userService.getUserById(id1),
+          this.userService.getUserById(id2),
+        ]);
+        if (user1 && user2) {
+          match.player1 = user1;
+          match.player2 = user2;
+        }
+
         res.status(200).json(match);
       } else {
         res.status(404).json({ error: "Match not found" });
