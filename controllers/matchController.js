@@ -1,12 +1,14 @@
 const MatchService = require("../services/matchService");
 const UserService = require("../services/userService");
+const StatusService = require("../services/statusService");
 const { Match } = require("../models/match");
 const { User } = require("../models/user");
 
 class MatchController {
-  constructor(matchService, userService) {
+  constructor(matchService, userService, statusService) {
     this.matchService = matchService;
     this.userService = userService;
+    this.statusService = statusService;
   }
 
   async createMatch(req, res) {
@@ -24,16 +26,15 @@ class MatchController {
       for (const match of matches) {
         const id1 = match.player1;
         const id2 = match.player2;
-
-        // Fetch users in parallel
-        const [user1, user2] = await Promise.all([
+        const id_status = match.id_status;
+        const [user1, user2, status] = await Promise.all([
           this.userService.getUserById(id1),
           this.userService.getUserById(id2),
+          this.statusService.getStatusById(id_status),
         ]);
-
-        // Replace ids with user objects if found
         if (user1) match.player1 = user1;
         if (user2) match.player2 = user2;
+        if (status) match.id_status = status;
       }
       res.status(200).json(matches);
     } catch (error) {
@@ -47,14 +48,15 @@ class MatchController {
       if (match) {
         const id1 = match.player1;
         const id2 = match.player2;
-        const [user1, user2] = await Promise.all([
+        const id_status = match.id_status;
+        const [user1, user2, status] = await Promise.all([
           this.userService.getUserById(id1),
           this.userService.getUserById(id2),
+          this.statusService.getStatusById(id_status),
         ]);
-        if (user1 && user2) {
-          match.player1 = user1;
-          match.player2 = user2;
-        }
+        if (user1) match.player1 = user1;
+        if (user2) match.player2 = user2;
+        if (status) match.id_status = status;
 
         res.status(200).json(match);
       } else {
