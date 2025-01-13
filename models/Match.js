@@ -60,7 +60,7 @@ const Match = sequelize.define(
 Match.associate = function (models) {
   Match.belongsTo(models.User, { as: "Player1", foreignKey: "player1" });
   Match.belongsTo(models.User, { as: "Player2", foreignKey: "player2" });
-  Match.belongsTo(models.Status, { foreignKey: "id_status" });
+  Status.hasMany(Match, { foreignKey: "id_status" });
 };
 
 module.exports = Match;
