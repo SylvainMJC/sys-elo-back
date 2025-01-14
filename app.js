@@ -1,12 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+
 app.use(
   cors({
     origin: "*",
   })
 );
 const bodyParser = require("body-parser");
+
 
 const User = require("./models/user");
 const UserService = require("./services/userService");
@@ -62,6 +64,7 @@ const loginRoutesInstance = loginRoutes(loginControllerInstance);
 const logoutRoutesInstance = logoutRoutes(loginControllerInstance);
 
 app.use(bodyParser.json());
+
 
 // Utiliser les routes
 app.use("/api/users", userRoutes);

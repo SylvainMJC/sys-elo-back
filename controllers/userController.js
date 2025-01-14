@@ -5,10 +5,8 @@ class UserController {
     }
 
     async getAllUsers(req, res) {
-        console.log('hereController')
         try {
             const users = await this.userService.getAllUsers();
-            console.log('hereController')
             res.status(200).json(users);
         } catch (error) {
             res.status(404).json({ error: 'Failed to fetch users' });
