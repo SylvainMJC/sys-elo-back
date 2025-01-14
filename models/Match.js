@@ -10,7 +10,7 @@ const Match = sequelize.define(
       autoIncrement: true,
     },
     player1: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.INTEGER,
       allowNull: true,
       references: {
         model: "Users",
@@ -18,7 +18,7 @@ const Match = sequelize.define(
       },
     },
     player2: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.INTEGER,
       allowNull: true,
       references: {
         model: "Users",
@@ -26,7 +26,7 @@ const Match = sequelize.define(
       },
     },
     id_status: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
       references: {

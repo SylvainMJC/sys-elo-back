@@ -10,12 +10,11 @@ class MatchService {
     }
 
     async createMatch(player1Id, player2Id, statusName) {
-    
         try {
             const player1 = await User.findByPk(player1Id);
             const player2 = await User.findByPk(player2Id);
             const status = await Status.findOne({ where: { name: statusName } });
-        
+
             if (!player1 || !player2) {
                 throw new Error('Un ou plusieurs joueurs sont introuvables.');
             }
@@ -30,10 +29,7 @@ class MatchService {
                     player2: player2.id,
                     id_status: status.id,
                 });
-
-
-
-
+                
             return match
         }catch (error) {
             throw new Error(`Error creating match: ${error.message}`);  

@@ -14,8 +14,12 @@ class MatchController {
   async createMatch(req, res) {
     try {
       const { player1, player2, statusName } = req.body;
-
-      const match = await this.matchService.createMatch(player1, player2, statusName);
+      
+      const match = await this.matchService.createMatch(
+        parseInt(player1, 10),
+        parseInt(player2, 10),
+        statusName
+      );
       res.status(201).json(match);
     } catch (error) {
       res.status(400).json({ error: error.message });
