@@ -14,7 +14,7 @@ class MatchController {
   async createMatch(req, res) {
     try {
       const { player1, player2, statusName } = req.body;
-      
+
       const match = await this.matchService.createMatch(
         parseInt(player1, 10),
         parseInt(player2, 10),
@@ -78,7 +78,9 @@ class MatchController {
       const { result_player1, result_player2, id_status } = req.body;
 
       if (result_player1 === undefined || result_player2 === undefined) {
-        throw new Error("Error updating match: result_player1 and result_player2 are required");
+        throw new Error(
+          "Error updating match: result_player1 and result_player2 are required"
+        );
       }
 
       const data = { result_player1, result_player2, id_status };
@@ -97,16 +99,14 @@ class MatchController {
     }
   }
 
-  async patchMatch(req, res) {
+  async patchMatchStatus(req, res) {
     try {
-      const id_status  = req.body;
-
-      const patchedMatch = await this.matchService.patchMatch(
+      const id_status = req.body.status_id;
+      const patchedMatch = await this.matchService.patchMatchStatus(
         req.params.id,
         id_status
       );
       if (patchedMatch) {
-        console.log(id_status, 'id_status');
         res.status(200).json(patchedMatch);
       } else {
         res.status(404).json({ error: "Match not found" });
