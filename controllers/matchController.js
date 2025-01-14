@@ -97,6 +97,25 @@ class MatchController {
     }
   }
 
+  async patchMatch(req, res) {
+    try {
+      const id_status  = req.body;
+
+      const patchedMatch = await this.matchService.patchMatch(
+        req.params.id,
+        id_status
+      );
+      if (patchedMatch) {
+        console.log(id_status, 'id_status');
+        res.status(200).json(patchedMatch);
+      } else {
+        res.status(404).json({ error: "Match not found" });
+      }
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
   async deleteMatch(req, res) {
     try {
       const deleted = await this.matchService.deleteMatch(req.params.id);

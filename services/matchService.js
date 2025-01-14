@@ -86,6 +86,25 @@ class MatchService {
         }
     }
 
+    async patchMatch(id, id_status) {
+        if (!id) {
+            return null;
+        }
+
+        try {
+            const match = await this.Match.findByPk(id);
+            if (!match) {
+                throw new Error(`Match with ID ${id} not found.`);
+            }
+            id_status = match.id_status 
+            
+
+            return await match.save();
+        } catch (error) {
+            throw new Error(`Error updating match with ID ${id}: ${error.message}`);
+        }
+    }
+
     async deleteMatch(id) {
         if (!id) {
             return null;
