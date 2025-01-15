@@ -16,12 +16,12 @@ const UserController = require("./controllers/userController");
 const UserRoutes = require("./routes/userRoutes");
 const registerRoutes = require("./routes/registerRoutes");
 
-const Status = require("./models/Status");
+const Status = require("./models/status");
 const StatusService = require("./services/statusService");
 const StatusController = require("./controllers/statusController");
 const StatusRoutes = require("./routes/statusRoutes");
 
-const Match = require("./models/match");
+const Match = require("./models/Match");
 const MatchService = require("./services/matchService");
 const MatchController = require("./controllers/matchController");
 const MatchRoutes = require("./routes/matchRoutes");
