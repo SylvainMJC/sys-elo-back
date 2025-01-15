@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const Status = require("../models/status");
+const Status = require("../models/Status");
 
 const EloCalculator = require("../functions/eloCalculate");
 

@@ -16,7 +16,7 @@ const UserController = require("./controllers/userController");
 const UserRoutes = require("./routes/userRoutes");
 const registerRoutes = require("./routes/registerRoutes");
 
-const Status = require("./models/status");
+const Status = require("./models/Status");
 const StatusService = require("./services/statusService");
 const StatusController = require("./controllers/statusController");
 const StatusRoutes = require("./routes/statusRoutes");
