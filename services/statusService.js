@@ -1,4 +1,4 @@
-// const { Status } = require('../models/Status');
+// const { Status } = require('../models/status');
 
 class StatusService {
     constructor(StatusModel) {

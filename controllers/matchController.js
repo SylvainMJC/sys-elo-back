@@ -1,9 +1,3 @@
-const MatchService = require("../services/matchService");
-const UserService = require("../services/userService");
-const StatusService = require("../services/statusService");
-const { Match } = require("../models/Match");
-const { User } = require("../models/user");
-
 class MatchController {
   constructor(matchService, userService, statusService) {
     this.matchService = matchService;

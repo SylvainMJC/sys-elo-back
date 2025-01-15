@@ -21,7 +21,7 @@ const StatusService = require("./services/statusService");
 const StatusController = require("./controllers/statusController");
 const StatusRoutes = require("./routes/statusRoutes");
 
-const Match = require("./models/Match");
+const Match = require("./models/match");
 const MatchService = require("./services/matchService");
 const MatchController = require("./controllers/matchController");
 const MatchRoutes = require("./routes/matchRoutes");

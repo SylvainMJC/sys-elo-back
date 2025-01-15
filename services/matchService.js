@@ -1,7 +1,7 @@
 const User = require("../models/user");
-const Status = require("../models/Status");
+const Status = require("../models/status");
 
-const EloCalculator = require("../functions/eloCalculate");
+// const EloCalculator = require("../functions/eloCalculate");
 
 class MatchService {
   constructor(MatchModel) {

@@ -1,7 +1,7 @@
 const sequelize = require('../config/db');
 const Match = require('..models/Match');
 const User = require('..models/user'); 
-import Status from '../models/status';
+const Status = require('./status');
 
 // Ajoutez les modèles à un objet
 const models = {
