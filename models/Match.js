@@ -63,4 +63,5 @@ Match.associate = function (models) {
   Status.hasMany(Match, { foreignKey: "id_status" });
 };
 
+
 module.exports = Match;
