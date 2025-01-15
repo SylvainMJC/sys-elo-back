@@ -9,7 +9,7 @@ app.use(
 );
 const bodyParser = require("body-parser");
 
-
+console.log(__dirname, 'dirname');
 const User = require("./models/user");
 const UserService = require("./services/userService");
 const UserController = require("./controllers/userController");
@@ -65,6 +65,7 @@ const logoutRoutesInstance = logoutRoutes(loginControllerInstance);
 
 app.use(bodyParser.json());
 
+console.log(Status, 'status');
 
 // Utiliser les routes
 app.use("/api/users", userRoutes);
