@@ -30,3 +30,9 @@ body
 
 How to run app :
 npm run dev
+
+
+
+actuellement le redis fonctionne en local avec uen aimge docker 
+
+en cours les routes pour utiliser le redis en cours de test avec postman
