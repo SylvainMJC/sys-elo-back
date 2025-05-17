@@ -1,4 +1,7 @@
+const redis = require("../config/redis");
+const Match = require("../models/match");
 class MatchController {
+
   constructor(matchService, userService, statusService) {
     this.matchService = matchService;
     this.userService = userService;
@@ -122,6 +125,94 @@ class MatchController {
       res.status(400).json({ error: error.message });
     }
   }
+  
+  //redis
+  async startMatch(req, res) {
+  const { result_player1, result_player2 } = req.body;
+  const matchId = req.params.id;
+
+  try {
+    const match = await Match.findByPk(matchId);
+
+    if (!match) {
+      return res.status(404).json({ error: 'Match not found' });
+    }
+
+    match.result_player1 = result_player1;
+    match.result_player2 = result_player2;
+    match.id_status = 2; // "In Progress"
+
+    await match.save();
+
+    // ✅ Définir la clé Redis AVANT de l'utiliser
+    const key = `match:${matchId}`;
+
+    // ✅ Mise à jour de Redis
+    await Promise.all([
+      redis.hSet(key, {
+        result_player1,
+        result_player2,
+      }),
+      redis.set(`${key}:status`, 'In Progress'),
+    ]);
+
+    res.status(200).json({ message: 'Match started and data saved to Redis' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+
+
+  // Mettre à jour les scores en live dans Redis
+  async updateLiveScore(req, res) {
+    try {
+      const matchId = req.params.id;
+      const { result_player1, result_player2 } = req.body;
+
+      if (
+        typeof result_player1 !== "number" ||
+        typeof result_player2 !== "number"
+      ) {
+        throw new Error("result_player1 et result_player2 doivent être des nombres");
+        
+      }
+
+      const updatedScore = await this.matchService.updateLiveScore(
+        matchId,
+        result_player1,
+        result_player2
+      );
+      res.status(200).json(updatedScore);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
+  // Terminer le match (récupérer scores Redis, mettre à jour BDD, supprimer Redis)
+  async endMatch(req, res) {
+    try {
+      const matchId = req.params.id;
+      const endedMatch = await this.matchService.endMatch(matchId);
+      res.status(200).json(endedMatch);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
+  // Récupérer le score en live depuis Redis
+  async getLiveMatchData(req, res) {
+  try {
+    const liveData = await this.matchService.getLiveMatchData(req.params.id);
+    res.status(200).json(liveData);
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+}
+
+
+
+
 }
 
 module.exports = MatchController;

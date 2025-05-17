@@ -14,5 +14,14 @@ module.exports = (matchController) => {
   router.patch("/:id", matchController.patchMatchStatus.bind(matchController));
   router.delete("/:id", matchController.deleteMatch.bind(matchController));
 
+  //redis
+  router.post("/:id/start", matchController.startMatch.bind(matchController));
+  router.patch("/:id/score", matchController.updateLiveScore.bind(matchController));
+  router.post("/:id/end", matchController.endMatch.bind(matchController));
+  router.get("/:id/live", matchController.getLiveMatchData.bind(matchController));
+
+
+
+
   return router;
 };
