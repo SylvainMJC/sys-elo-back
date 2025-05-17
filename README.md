@@ -36,3 +36,21 @@ npm run dev
 actuellement le redis fonctionne en local avec uen aimge docker 
 
 en cours les routes pour utiliser le redis en cours de test avec postman
+
+
+**REDIS**
+
+creation d'un match 
+```
+POST http://localhost:3000/api/matches/id/start
+``` 
+
+check du redis 
+```
+redis-cli
+HGETALL match:8
+```
+
+![image](https://github.com/user-attachments/assets/d830d7b7-a275-4fd6-95cd-170ffbe3b97d)
+
+
