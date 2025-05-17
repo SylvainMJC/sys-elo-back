@@ -122,8 +122,12 @@ resultat du get:
 }
 ``` 
 
+### affichage du score penant la partie ###  
+```
+GET http://localhost:3000/api/matches/id/live
+``` 
 
-
+Affichage du score et du status
 
 
 
