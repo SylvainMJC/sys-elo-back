@@ -38,9 +38,9 @@ actuellement le redis fonctionne en local avec uen aimge docker
 en cours les routes pour utiliser le redis en cours de test avec postman
 
 
-**REDIS**
+## REDIS ##
 
-creation d'un match 
+### creation d'un match ###  
 ```
 POST http://localhost:3000/api/matches/id/start
 ``` 
@@ -52,5 +52,18 @@ HGETALL match:8
 ```
 
 ![image](https://github.com/user-attachments/assets/d830d7b7-a275-4fd6-95cd-170ffbe3b97d)
+
+### mise a jour d'un match ###
+```
+PATCh http://localhost:3000/api/matches/id/score
+``` 
+
+check du redis 
+```
+redis-cli
+HGETALL match:8
+```
+![image](https://github.com/user-attachments/assets/33d1357c-4e09-4114-a9a7-b1ea1aef7b0c)
+
 
 
