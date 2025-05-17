@@ -2,8 +2,21 @@ require("dotenv").config();
 const sequelize = require("./config/db");
 const express = require("express");
 const app = require("./app");
+const redisClient = require("./config/redis");
 
 app.use(express.json());
+
+//Connexion a Redis
+(async () => {
+  try {
+    await redisClient.connect();
+    await redisClient.set("test", "redis-ok");
+    const result = await redisClient.get("test");
+    console.log("Redis test result:", result); 
+  } catch (error) {
+    console.error("Redis connection error:", error);
+  }
+})();
 
 // Tester la connexion à la base de données
 sequelize
