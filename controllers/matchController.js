@@ -138,16 +138,19 @@ class MatchController {
       return res.status(404).json({ error: 'Match not found' });
     }
 
+    const score1 = result_player1 ?? 0;
+    const score2 = result_player2 ?? 0;
+
     match.result_player1 = result_player1;
     match.result_player2 = result_player2;
-    match.id_status = 2; // "In Progress"
+    match.id_status = 2; 
 
     await match.save();
 
-    // ✅ Définir la clé Redis AVANT de l'utiliser
+    
     const key = `match:${matchId}`;
 
-    // ✅ Mise à jour de Redis
+    
     await Promise.all([
       redis.hSet(key, {
         result_player1,
