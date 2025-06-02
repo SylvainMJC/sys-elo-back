@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const Status = require("../models/status");
+const redis= require("../config/redis");
+const Match = require("../models/match");
 
 // const EloCalculator = require("../functions/eloCalculate");
 
@@ -121,6 +123,108 @@ class MatchService {
       throw new Error(`Error deleting match with ID ${id}: ${error.message}`);
     }
   }
+
+
+  //redis
+  async startMatch(id) {
+    const match = await this.Match.findByPk(id);
+    if (!match) throw new Error("Match not found");
+
+    const inProgressStatus = await Status.findOne({ where: { name: "In Progress" } });
+    if (!inProgressStatus) throw new Error("Status 'In Progress' not found.");
+
+    match.id_status = inProgressStatus.id;
+    await match.save();
+
+    const key = `match:${id}`;
+
+    await redis.set(`${key}:status`, "In Progress");
+    await redis.hSet(key, {
+      result_player1: 0,
+      result_player2: 0,
+    });
+
+  return match;
+}
+
+
+  async updateLiveScore(idMatch, score1, score2) {
+    const key = `match:${idMatch}`;
+    const score = await redis.hGetAll(key);
+
+    if (Object.keys(score).length === 0) {
+      throw new Error("Match live data not found");
+    }
+
+    await redis.hSet(key, {
+      result_player1: score1,
+      result_player2: score2,
+    });
+
+    return {
+      matchId: idMatch,
+      result_player1: score1,
+      result_player2: score2,
+    };
+  }
+
+  async endMatch(matchId) {
+    const key = `match:${matchId}`;
+    const [score, status] = await Promise.all([
+      redis.hGetAll(key),
+      redis.get(`${key}:status`)
+    ]);
+
+    if (!score || Object.keys(score).length === 0) {
+      throw new Error("No live data found for this match.");
+    }
+
+    const match = await Match.findByPk(matchId);
+
+    if (!match) {
+      throw new Error("Match not found in the database.");
+    }
+
+    // Update Postgres fields
+    match.result_player1 = parseInt(score.result_player1, 10);
+    match.result_player2 = parseInt(score.result_player2, 10);
+    match.id_status = 3; // ← à adapter si 3 = "Finished"
+
+    await match.save();
+
+    // Clean up Redis
+    await Promise.all([
+      redis.del(key),
+      redis.del(`${key}:status`)
+    ]);
+
+    return {
+      message: "Match ended. Data saved in Postgres and removed from Redis.",
+      matchId,
+      result_player1: match.result_player1,
+      result_player2: match.result_player2
+    };
+  }
+
+  async getLiveMatchData(idMatch) {
+    const key = `match:${idMatch}`;
+    const [score, status] = await Promise.all([
+      redis.hGetAll(key),
+      redis.get(`${key}:status`)
+    ]);
+
+    if (!score || Object.keys(score).length === 0) {
+      throw new Error("Live match data not found");
+    }
+
+    return {
+      matchId: idMatch,
+      result_player1: parseInt(score.result_player1, 10),
+      result_player2: parseInt(score.result_player2, 10),
+      status
+    };
+  }
+
 }
 
 module.exports = MatchService;
