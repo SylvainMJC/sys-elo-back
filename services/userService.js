@@ -11,10 +11,11 @@ class UserService {
   }
 
   async getUserById(id) {
-    if (!id) {
-      return null;
+    try {
+      return await this.User.findByPk(id);
+    } catch (error) {
+      throw new Error(`Erreur lors de la récupération de l'utilisateur: ${error.message}`);
     }
-    return this.User.findByPk(id);
   }
 
   async createUser(data) {
@@ -48,6 +49,35 @@ class UserService {
       return null;
     }
     return user.destroy();
+  }
+
+  async updateUserElo(userId, newElo) {
+    try {
+      const user = await this.User.findByPk(userId);
+      if (!user) {
+        throw new Error('Utilisateur non trouvé');
+      }
+      
+      user.elo = newElo;
+      user.updated_at = new Date();
+      await user.save();
+      
+      return user;
+    } catch (error) {
+      throw new Error(`Erreur lors de la mise à jour de l'ELO: ${error.message}`);
+    }
+  }
+
+  async getTopPlayers(limit = 10) {
+    try {
+      return await this.User.findAll({
+        order: [['elo', 'DESC']],
+        limit: limit,
+        attributes: ['id', 'username', 'elo']
+      });
+    } catch (error) {
+      throw new Error(`Erreur lors de la récupération du classement: ${error.message}`);
+    }
   }
 }
 

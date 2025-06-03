@@ -20,8 +20,11 @@ module.exports = (matchController) => {
   router.post("/:id/end", matchController.endMatch.bind(matchController));
   router.get("/:id/live", matchController.getLiveMatchData.bind(matchController));
 
-
-
+  // 🎮 NOUVELLES ROUTES DISCORD
+  router.get("/discord/test", matchController.testDiscordConnections.bind(matchController));
+  router.get("/discord/status", matchController.getDiscordStatus.bind(matchController));
+  router.post("/discord/simulate", matchController.simulateDiscordNotification.bind(matchController));
+  router.post("/discord/daily-stats", matchController.testDailyStatistics.bind(matchController));
 
   return router;
 };

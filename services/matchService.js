@@ -198,11 +198,18 @@ class MatchService {
       redis.del(`${key}:status`)
     ]);
 
+    // ✅ FIX: Retourner TOUS les champs nécessaires
     return {
-      message: "Match ended. Data saved in Postgres and removed from Redis.",
-      matchId,
+      id: match.id,
+      player1: match.player1,
+      player2: match.player2,
       result_player1: match.result_player1,
-      result_player2: match.result_player2
+      result_player2: match.result_player2,
+      id_status: match.id_status,
+      created_at: match.created_at,
+      updated_at: match.updated_at,
+      message: "Match ended. Data saved in Postgres and removed from Redis.",
+      matchId
     };
   }
 
